@@ -23,11 +23,27 @@ class DummyAppScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              target.iconPath,
-              width: 80,
-              height: 80,
-            ),
+            if (target.platform == SharePlatform.snapchat || 
+                target.platform == SharePlatform.mail || 
+                target.platform == SharePlatform.tiktok)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Colors.black87,
+                  shape: BoxShape.circle,
+                ),
+                child: Image.asset(
+                  target.iconPath,
+                  width: 48, // 48 + 16*2 = 80 total size
+                  height: 48,
+                ),
+              )
+            else
+              Image.asset(
+                target.iconPath,
+                width: 80,
+                height: 80,
+              ),
             const SizedBox(height: 24),
             Text(
               'Launched ${target.platformName}',

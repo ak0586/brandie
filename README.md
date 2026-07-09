@@ -125,14 +125,16 @@ No logo image asset is required. The `ORIFLAME / SWEDEN` text in the design is r
 
 ---
 
-## ✨ Bonus UX Touches
+## ✨ Bonus UX Touches & Figma Fidelity
 
 1. **Per-card 3s overlay with slide-up animation** — product info slides up and fades in (not just fades), matching Instagram Reels' product reveal pattern.
 2. **Animated `AnimatedSwitcher` on loading steps** — smooth crossfade between empty circle → green check icon.
-3. **`ValueKey` on each `SmartPostCard`** — ensures Flutter correctly re-creates card state (including resetting the overlay timer) when posts are reordered or updated.
-4. **`DraggableScrollableSheet` for Edit Caption** — allows the user to drag the sheet to different heights, adapting to keyboard presence naturally.
-5. **Caption text tappable** — tapping the caption body (not just the "Edit Caption" button) opens the modal, matching Figma's note: "tapping the caption in the main card opens edit view."
-6. **`SnackBar` on share completion** — platform-specific "Opening Instagram..." message gives clear feedback without leaving the app.
+3. **Figma-Perfect "Ready to share" Badge** — precise `LinearGradient` mapping (dusty pink to pastel purple) matching the inspector CSS, combined with `Icons.auto_awesome` for the exact sparkle motif.
+4. **Transparent Floating Bottom Nav** — by removing it from the `Column` and floating it within the `Stack`, the nav bar sits transparently over the image background.
+5. **Authentic Share Loading Overlay** — rebuilt the overlay into a white card containing a thick, infinite circular spinner and a rounded linear progress bar, seamlessly transitioning through 4 text stages as the animation progresses.
+6. **Pixel-Perfect App Icons** — extracted the true Oriflame "O" swirl logo and constructed a charcoal grey (`#262928`) background for iOS and Android Adaptive Icons, ensuring it fills the splash screen without Android masking distortion.
+7. **`DraggableScrollableSheet` for Edit Caption** — allows the user to drag the sheet to different heights, adapting to keyboard presence naturally.
+8. **Caption text tappable** — tapping the caption body (not just the "Edit Caption" button) opens the modal, matching Figma's note: "tapping the caption in the main card opens edit view."
 
 ---
 

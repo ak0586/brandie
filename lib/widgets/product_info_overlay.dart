@@ -18,28 +18,28 @@ class ProductInfoOverlay extends StatelessWidget {
     return GestureDetector(
       onTap: () => _openProductDetail(context),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        width: MediaQuery.of(context).size.width / 1.5,
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          // Semi-transparent dark card that floats over the image
-          color: Colors.black.withValues(alpha: 0.55),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.white12, width: 0.5),
+          color: AppColors.productIfoBackground,
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
             // Product thumbnail
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(2),
               child: Image.asset(
                 post.productThumbnailUrl,
-                width: 48,
-                height: 48,
+                width: 40,
+                height: 40,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
                   width: 48,
                   height: 48,
                   color: Colors.grey.shade800,
-                  child: const Icon(Icons.image, size: 24, color: Colors.white54),
+                  child:
+                      const Icon(Icons.image, size: 24, color: Colors.white54),
                 ),
               ),
             ),
@@ -97,11 +97,7 @@ class ProductInfoOverlay extends StatelessWidget {
               ),
             ),
             // Arrow hint (tappable)
-            const Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
-              size: 20,
-            ),
+            //
           ],
         ),
       ),
@@ -176,4 +172,3 @@ class _ProductDetailStub extends StatelessWidget {
     );
   }
 }
-

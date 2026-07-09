@@ -8,28 +8,54 @@ class OriflameLogoText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'ORIFLAME',
-          style: GoogleFonts.inter(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 3,
-            color: AppColors.textPrimary,
+    return IntrinsicWidth(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Text(
+              'ORIFLAME',
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 3,
+                color: AppColors.textPrimary,
+              ),
+            ),
           ),
-        ),
-        Text(
-          'SWEDEN',
-          style: GoogleFonts.inter(
-            fontSize: 8,
-            fontWeight: FontWeight.w400,
-            letterSpacing: 4,
-            color: AppColors.textSecondary,
+          Row(
+            children: [
+              Expanded(
+                child: Divider(
+                  color: AppColors.textSecondary.withValues(alpha: 0.5),
+                  thickness: 0.5,
+                  height: 1,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Text(
+                  'SWEDEN',
+                  style: GoogleFonts.inter(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 4,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Divider(
+                  color: AppColors.textSecondary.withValues(alpha: 0.5),
+                  thickness: 0.5,
+                  height: 1,
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -49,16 +75,26 @@ class SmartPostAppBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _IconWithLabel(
-            icon: Icons.auto_awesome,
-            label: 'Your Assistant',
-            onTap: () {},
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: _IconWithLabel(
+                assetPath: 'assets/icons/AI_assistant.png',
+                label: 'Your Assistant',
+                onTap: () {},
+              ),
+            ),
           ),
-          const Expanded(child: Center(child: OriflameLogoText())),
-          _IconWithLabel(
-            icon: Icons.camera_alt_outlined,
-            label: 'Camera',
-            onTap: () {},
+          const OriflameLogoText(),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: _IconWithLabel(
+                assetPath: 'assets/icons/camera.png',
+                label: 'Camera',
+                onTap: () {},
+              ),
+            ),
           ),
         ],
       ),
@@ -67,12 +103,12 @@ class SmartPostAppBar extends StatelessWidget {
 }
 
 class _IconWithLabel extends StatelessWidget {
-  final IconData icon;
+  final String assetPath;
   final String label;
   final VoidCallback onTap;
 
   const _IconWithLabel({
-    required this.icon,
+    required this.assetPath,
     required this.label,
     required this.onTap,
   });
@@ -81,29 +117,28 @@ class _IconWithLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: const BoxDecoration(
-              color: AppColors.navBackground,
-              shape: BoxShape.circle,
+      child: SizedBox(
+        width: 76,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 32,
+              height: 32,
+              child: Image.asset(assetPath),
             ),
-            child: Icon(icon, color: Colors.white, size: 22),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: 9,
-              color: AppColors.textTertiary,
+            const SizedBox(height: 2),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                color: AppColors.textTertiary,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-

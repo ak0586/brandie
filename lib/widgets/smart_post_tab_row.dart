@@ -42,11 +42,6 @@ class SmartPostTabRow extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    height: 2,
-                    color: isActive ? AppColors.accent : Colors.transparent,
-                  ),
                 ],
               ),
             ),

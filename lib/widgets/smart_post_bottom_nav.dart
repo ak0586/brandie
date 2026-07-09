@@ -14,50 +14,46 @@ class SmartPostBottomNav extends StatelessWidget {
   });
 
   static const _items = [
-    _NavItem(icon: Icons.share, label: 'Share'),
-    _NavItem(icon: Icons.search, label: 'Search'),
-    _NavItem(icon: Icons.home_outlined, label: 'Home'),
-    _NavItem(icon: Icons.chat_bubble_outline, label: 'Chat'),
-    _NavItem(icon: Icons.person_outline, label: 'Profile'),
+    _NavItem(assetPath: 'assets/icons/boost.png', label: 'Share'),
+    _NavItem(assetPath: 'assets/icons/search.png', label: 'Search'),
+    _NavItem(assetPath: 'assets/icons/home.png', label: 'Home'),
+    _NavItem(assetPath: 'assets/icons/chat.png', label: 'Chat'),
+    _NavItem(assetPath: 'assets/icons/profile.png', label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
-      ),
-      child: Row(
-        children: List.generate(_items.length, (i) {
-          final isActive = i == activeIndex;
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => onItemTap(i),
-              behavior: HitTestBehavior.opaque,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    _items[i].icon,
-                    color:
-                        isActive ? AppColors.accent : AppColors.textTertiary,
-                    size: 24,
-                  ),
-                ],
-              ),
+    return Row(
+      children: List.generate(_items.length, (i) {
+        final isActive = i == activeIndex;
+        return Expanded(
+          child: GestureDetector(
+            onTap: () => onItemTap(i),
+            behavior: HitTestBehavior.opaque,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  _items[i].assetPath,
+                  color: isActive ? AppColors.accent : AppColors.textTertiary,
+                  width: i == 0 ? 46 : 32,
+                  height: i == 0 ? 46 : 32,
+                ),
+              ],
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 }
 
 class _NavItem {
-  final IconData icon;
+  final String assetPath;
   final String label;
-  const _NavItem({required this.icon, required this.label});
-}
 
+  const _NavItem({
+    required this.assetPath,
+    required this.label,
+  });
+}

@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../data/mock_data.dart';
 import '../theme/app_theme.dart';
 import 'smart_post_screen.dart';
+import '../widgets/smart_post_app_bar.dart';
+import '../widgets/smart_post_tab_row.dart';
 
 /// Loading screen shown while "generating" personalised Smart Posts.
 /// Animates 4 checklist steps to a checked green state one-by-one,
@@ -91,65 +93,13 @@ class _GeneratingPostsScreenState extends State<GeneratingPostsScreen> {
   /// The loading screen shares the same AppBar/TabRow as the main screen
   /// so the transition feels seamless (matching the Figma prototype exactly).
   Widget _buildAppBar() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm,
-      ),
-      child: Row(
-        children: [
-          // Placeholder left icon (AI assistant icon in dark circle)
-          Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: AppColors.navBackground,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.auto_awesome,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          const Expanded(
-            child: Center(
-              child: _OriflameLogoText(),
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          // Camera icon button (top-right)
-          Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: AppColors.navBackground,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.camera_alt_outlined,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SmartPostAppBar();
   }
 
   Widget _buildTabRow() {
-    return Container(
-      color: Colors.white,
-      child: Row(
-        children: [
-          _TabItem(label: 'Smart Post', isActive: true),
-          _TabItem(label: 'Library', isActive: false),
-          _TabItem(label: 'Communities', isActive: false),
-          _TabItem(label: 'Share&Win', isActive: false),
-        ],
-      ),
+    return SmartPostTabRow(
+      activeIndex: 0,
+      onTabSelected: (_) {},
     );
   }
 
@@ -251,11 +201,9 @@ class _LoadingStep extends StatelessWidget {
               text,
               style: GoogleFonts.inter(
                 fontSize: 13,
-                color: isChecked
-                    ? AppColors.textPrimary
-                    : AppColors.textTertiary,
-                fontWeight:
-                    isChecked ? FontWeight.w500 : FontWeight.w400,
+                color:
+                    isChecked ? AppColors.textPrimary : AppColors.textTertiary,
+                fontWeight: isChecked ? FontWeight.w500 : FontWeight.w400,
               ),
             ),
           ),
@@ -264,72 +212,3 @@ class _LoadingStep extends StatelessWidget {
     );
   }
 }
-
-/// Oriflame brand name rendered in text (no image asset needed).
-class _OriflameLogoText extends StatelessWidget {
-  const _OriflameLogoText();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'ORIFLAME',
-          style: GoogleFonts.inter(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 3,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        Text(
-          'SWEDEN',
-          style: GoogleFonts.inter(
-            fontSize: 8,
-            fontWeight: FontWeight.w400,
-            letterSpacing: 4,
-            color: AppColors.textSecondary,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// A simple tab item with green underline when active.
-class _TabItem extends StatelessWidget {
-  final String label;
-  final bool isActive;
-
-  const _TabItem({required this.label, required this.isActive});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            child: Text(
-              label,
-              style: isActive
-                  ? AppTextStyles.tabActive
-                  : AppTextStyles.tabInactive,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          if (isActive)
-            Container(
-              height: 2,
-              color: AppColors.accent,
-            )
-          else
-            const SizedBox(height: 2),
-        ],
-      ),
-    );
-  }
-}
-

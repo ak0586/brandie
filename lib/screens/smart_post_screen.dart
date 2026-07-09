@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/mock_data.dart';
 import '../models/smart_post_content.dart';
+import '../models/share_target.dart';
 import '../theme/app_theme.dart';
 import '../widgets/smart_post_app_bar.dart';
 import '../widgets/smart_post_tab_row.dart';
@@ -11,6 +12,8 @@ import '../widgets/share_loading_overlay.dart';
 import '../widgets/product_info_overlay.dart';
 import '../widgets/edit_caption_sheet.dart';
 import '../widgets/quick_share_row.dart';
+import 'dummy_app_screen.dart';
+import 'dart:ui';
 
 /// Main Smart Post screen.
 ///
@@ -47,7 +50,7 @@ class _SmartPostScreenState extends State<SmartPostScreen>
   int _activeNavIndex = 0;
 
   bool _isCaptionExpanded = false;
-  String? _shareTargetName;
+  ShareTarget? _shareTarget;
 
   // Product overlay animation — resets on each page change
   late AnimationController _overlayController;
@@ -115,24 +118,18 @@ class _SmartPostScreenState extends State<SmartPostScreen>
     });
   }
 
-  void _onShareTap(String platformName) {
-    setState(() => _shareTargetName = platformName);
+  void _onShareTap(ShareTarget target) {
+    setState(() => _shareTarget = target);
   }
 
   void _onShareComplete() {
-    final name = _shareTargetName ?? '';
-    setState(() => _shareTargetName = null);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Opening $name...'),
-        backgroundColor: AppColors.accent,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
-        ),
-      ),
-    );
+    final target = _shareTarget;
+    setState(() => _shareTarget = null);
+    if (target != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => DummyAppScreen(target: target)),
+      );
+    }
   }
 
   void _openEditCaption() {
@@ -165,18 +162,23 @@ class _SmartPostScreenState extends State<SmartPostScreen>
                 ),
                 // ── Main content area ─────────────────────────────────────
                 Expanded(child: _buildMainContent()),
-                // ── Fixed BottomNav ───────────────────────────────────────
-                SmartPostBottomNav(
-                  activeIndex: _activeNavIndex,
-                  onItemTap: (i) => setState(() => _activeNavIndex = i),
-                ),
               ],
             ),
+            // ── Transparent Overlapping BottomNav ─────────────────────────
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 10,
+              child: SmartPostBottomNav(
+                activeIndex: _activeNavIndex,
+                onItemTap: (i) => setState(() => _activeNavIndex = i),
+              ),
+            ),
             // ── Share loading overlay ─────────────────────────────────────
-            if (_shareTargetName != null)
+            if (_shareTarget != null)
               Positioned.fill(
                 child: ShareLoadingOverlay(
-                  platformName: _shareTargetName!,
+                  platformName: _shareTarget!.platformName,
                   onComplete: _onShareComplete,
                 ),
               ),
@@ -244,8 +246,8 @@ class _SmartPostScreenState extends State<SmartPostScreen>
         // ── Fixed dot indicators (right edge, vertical centre) ────────────
         Positioned(
           right: 8,
-          top: 0,
-          bottom: 0,
+          top: -50,
+          bottom: 50,
           child: Center(child: _buildDotIndicators()),
         ),
 
@@ -253,7 +255,7 @@ class _SmartPostScreenState extends State<SmartPostScreen>
         Positioned(
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: 50,
           child: _buildBottomPanel(post),
         ),
       ],
@@ -269,36 +271,41 @@ class _SmartPostScreenState extends State<SmartPostScreen>
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.accent, width: 2),
+            border: Border.all(color: Colors.white, width: 1.5),
           ),
           child: CircleAvatar(
-            radius: 18,
+            radius: 22,
+            backgroundColor: Colors.transparent,
             backgroundImage: NetworkImage(post.userAvatarUrl),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.readyBadge,
-                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xFFDD7D7D), Color(0xFF9D92DF)],
+                  ),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.star, color: Colors.white, size: 10),
-                    const SizedBox(width: 3),
+                    const Icon(Icons.auto_awesome, color: Colors.white, size: 12),
+                    const SizedBox(width: 6),
                     Text(
                       'Ready to share',
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
+                        height: 1.2,
                       ),
                     ),
                   ],
@@ -310,9 +317,7 @@ class _SmartPostScreenState extends State<SmartPostScreen>
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   color: Colors.white,
-                  shadows: [
-                    const Shadow(blurRadius: 4, color: Colors.black54)
-                  ],
+                  shadows: [const Shadow(blurRadius: 4, color: Colors.black54)],
                 ),
               ),
             ],
@@ -373,7 +378,7 @@ class _SmartPostScreenState extends State<SmartPostScreen>
             child: FadeTransition(
               opacity: _overlayOpacity,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10, right: 30),
                 child: ProductInfoOverlay(post: post),
               ),
             ),
@@ -384,60 +389,76 @@ class _SmartPostScreenState extends State<SmartPostScreen>
           const SizedBox(height: 8),
 
           // CAPTION SUGGESTION | Edit Caption
-          Row(
-            children: [
-              const Icon(
-                Icons.article_outlined,
-                size: 13,
-                color: Colors.white70,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                'CAPTION SUGGESTION',
-                style: GoogleFonts.inter(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.8,
-                  color: Colors.white70,
-                ),
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: _openEditCaption,
-                child: Row(
+          Container(
+            padding: const EdgeInsets.fromLTRB(8, 7, 8, 7),
+            decoration: const BoxDecoration(
+                color: AppColors.captionBackground,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    const Icon(Icons.edit, size: 12, color: AppColors.accent),
-                    const SizedBox(width: 3),
+                    const Icon(
+                      Icons.article_outlined,
+                      size: 13,
+                      color: Colors.white70,
+                    ),
+                    const SizedBox(width: 4),
                     Text(
-                      'Edit Caption',
+                      'CAPTION SUGGESTION',
                       style: GoogleFonts.inter(
-                        fontSize: 12,
-                        color: AppColors.accent,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.8,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: _openEditCaption,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit,
+                              size: 12, color: AppColors.accent),
+                          const SizedBox(width: 3),
+                          Text(
+                            'Edit Caption',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: AppColors.accent,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
+                const SizedBox(height: 6),
 
-          // Caption text — tappable opens editor
-          GestureDetector(
-            onTap: _openEditCaption,
-            child: _buildCaptionText(post),
-          ),
-          const SizedBox(height: 6),
+                // Caption text — tappable opens editor
+                GestureDetector(
+                  onTap: _openEditCaption,
+                  child: _buildCaptionText(post),
+                ),
+                const SizedBox(height: 6),
 
-          // Referral info
-          _buildReferralInfo(post),
-          const SizedBox(height: 10),
+                // Referral info
+                _buildReferralInfo(post),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
 
           // Quick share row — always visible, never scrolls
           QuickShareRow(
             post: post,
-            onShareTap: _onShareTap,
+            onShareTap: (name) {
+              final target = MockData.shareTargets.firstWhere(
+                (t) => t.platformName == name,
+              );
+              _onShareTap(target);
+            },
           ),
         ],
       ),
@@ -445,31 +466,38 @@ class _SmartPostScreenState extends State<SmartPostScreen>
   }
 
   Widget _buildSongRow(SmartPostContent post) {
-    return Row(
-      children: [
-        const Icon(Icons.music_note, size: 14, color: Colors.white70),
-        const SizedBox(width: 4),
-        Text(
-          'Recommended: ',
-          style: GoogleFonts.inter(fontSize: 12, color: Colors.white70),
-        ),
-        Flexible(
-          child: Text(
-            '${post.recommendedSong} ',
-            style: GoogleFonts.inter(
-              fontSize: 12,
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontStyle: FontStyle.italic,
-            ),
-            overflow: TextOverflow.ellipsis,
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppColors.captionBackground,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.music_note, size: 14, color: Colors.white70),
+          const SizedBox(width: 4),
+          Text(
+            'RECOMMENDED: ',
+            style: GoogleFonts.inter(fontSize: 12, color: Colors.white70),
           ),
-        ),
-        Text(
-          'by ${post.recommendedArtist}',
-          style: GoogleFonts.inter(fontSize: 12, color: Colors.white70),
-        ),
-      ],
+          Flexible(
+            child: Text(
+              '${post.recommendedSong} ',
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontStyle: FontStyle.italic,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Text(
+            'by ${post.recommendedArtist}',
+            style: GoogleFonts.inter(fontSize: 12, color: Colors.white70),
+          ),
+        ],
+      ),
     );
   }
 
@@ -481,14 +509,12 @@ class _SmartPostScreenState extends State<SmartPostScreen>
         Text(
           fullText,
           style: GoogleFonts.inter(fontSize: 12, color: Colors.white),
-          maxLines: _isCaptionExpanded ? null : 3,
-          overflow: _isCaptionExpanded
-              ? TextOverflow.visible
-              : TextOverflow.ellipsis,
+          maxLines: _isCaptionExpanded ? null : 2,
+          overflow:
+              _isCaptionExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
         ),
         GestureDetector(
-          onTap: () =>
-              setState(() => _isCaptionExpanded = !_isCaptionExpanded),
+          onTap: () => setState(() => _isCaptionExpanded = !_isCaptionExpanded),
           child: Text(
             _isCaptionExpanded ? 'See less' : 'see more',
             style: GoogleFonts.inter(
@@ -526,4 +552,3 @@ class _SmartPostScreenState extends State<SmartPostScreen>
     );
   }
 }
-

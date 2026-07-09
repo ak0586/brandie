@@ -6,8 +6,7 @@ import '../models/share_target.dart';
 class MockData {
   MockData._();
 
-  static const String _userAvatar =
-      'https://i.pravatar.cc/150?img=47'; // consistent female avatar
+  static const String _userAvatar = 'https://i.pravatar.cc/150?img=47';
 
   static final List<SmartPostContent> posts = [
     SmartPostContent(
@@ -23,10 +22,8 @@ class MockData {
       referralLink: 'www.oriflame.com/giordani/amanda3012',
       recommendedSong: 'Bad Habits',
       recommendedArtist: 'Ed Sheeran',
-      productImageUrl:
-          'https://images.unsplash.com/photo-1586495777744-4e6232bf6b0e?w=600&q=80',
-      productThumbnailUrl:
-          'https://images.unsplash.com/photo-1586495777744-4e6232bf6b0e?w=100&q=60',
+      productImageUrl: 'assets/post/post1_lipstick.png',
+      productThumbnailUrl: 'assets/post/post1_lipstick.png',
       userAvatarUrl: _userAvatar,
     ),
     SmartPostContent(
@@ -42,10 +39,8 @@ class MockData {
       referralLink: 'www.oriflame.com/giordani/amanda3012',
       recommendedSong: 'Unstoppable',
       recommendedArtist: 'Sia',
-      productImageUrl:
-          'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&q=80',
-      productThumbnailUrl:
-          'https://images.unsplash.com/photo-1541643600914-78b084683702?w=100&q=60',
+      productImageUrl: 'assets/post/post2_perfume.png',
+      productThumbnailUrl: 'assets/post/post2_perfume.png',
       userAvatarUrl: _userAvatar,
     ),
     SmartPostContent(
@@ -61,10 +56,8 @@ class MockData {
       referralLink: 'www.oriflame.com/giordani/amanda3012',
       recommendedSong: 'Vogue',
       recommendedArtist: 'Madonna',
-      productImageUrl:
-          'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80',
-      productThumbnailUrl:
-          'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=100&q=60',
+      productImageUrl: 'assets/post/post3_mascara.png',
+      productThumbnailUrl: 'assets/post/post3_mascara.png',
       userAvatarUrl: _userAvatar,
     ),
   ];

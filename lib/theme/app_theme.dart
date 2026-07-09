@@ -15,6 +15,12 @@ class AppColors {
   /// Disabled/greyed-out state.
   static const Color accentDisabled = Color(0xFFB0D9C6);
 
+  ///
+  static const Color productIfoBackground = Color(0x29BBBBBB);
+
+  ///
+  static const Color captionBackground = Color(0x39313131);
+
   /// Dark navy for AppBar and BottomNavigationBar backgrounds.
   static const Color navBackground = Color(0xFF1A1A2E);
 
@@ -153,4 +159,3 @@ class AppSpacing {
   static const double badgeRadius = 20.0;
   static const double buttonRadius = 12.0;
 }
-

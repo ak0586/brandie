@@ -285,7 +285,8 @@ class _SmartPostScreenState extends State<SmartPostScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                padding:
+                    const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     begin: Alignment.centerLeft,
@@ -297,7 +298,8 @@ class _SmartPostScreenState extends State<SmartPostScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.auto_awesome, color: Colors.white, size: 12),
+                    const Icon(Icons.auto_awesome,
+                        color: Colors.white, size: 12),
                     const SizedBox(width: 6),
                     Text(
                       'Ready to share',
@@ -324,10 +326,10 @@ class _SmartPostScreenState extends State<SmartPostScreen>
           ),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
           decoration: BoxDecoration(
             color: Colors.black45,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(38),
           ),
           child: Text(
             '${_currentPage + 1} of ${_posts.length}',
